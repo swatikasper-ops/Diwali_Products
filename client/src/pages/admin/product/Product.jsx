@@ -225,7 +225,6 @@
 // }
 
 // export default Product;
-
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ChevronDown,
@@ -243,129 +242,82 @@ import {
   Circle,
   CopyCheck,
   FunnelX,
+  Eye,
 } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router";
-import productData from "../../../data/products.json";
-// import axiosInstance from "../../../api/axiosInstance";
-// import kpiCards from "./KpiCardProductlist";
-// import Active_product from "../../../assets/icons/Icon.png";
+import { allProducts } from "../../../data/dummyData";
 
 const Products = () => {
   const [product, setProduct] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   const fetchProduct = async () => {
-  //     try {
-  //       const res = await axiosInstance.get("/products/all");
-  //       setProduct(res.data);
-  //     } catch (error) {
-  //       console.error("Error fetching products:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchProduct();
-  // }, []);
+  // Load products from dummyData
+  useEffect(() => {
+    setProduct(allProducts);
+    setLoading(false);
+  }, []);
 
   const { uuid } = useParams();
 
-  const Editproduct = useMemo(() => {
-    if (!uuid || !productData?.length) return null;
-
-    return productData.find(
-      (p) => p.uuid && p.uuid.toLowerCase() === uuid.toLowerCase()
-    );
-  }, [productData, uuid]);
-
-
-  //  Delete button + selected items
+  // Delete button + selected items
   const [selectedItems, setSelectedItems] = useState([]);
   const deletebtnShow = selectedItems.length > 0;
 
   // Select all checkboxes
   const handleSelectAll = (e) => {
-    const visibleIds = currentItems.map((item) => item.id || item.uuid);
+    const visibleIds = currentItems.map((item) => item.id || item.uuid || item._id);
 
     if (e.target.checked) {
-      // Add only visible product IDs
-      // const visibleIds = currentItems.map((item) => item.id);
       setSelectedItems((prev) => [...new Set([...prev, ...visibleIds])]);
     } else {
-      // Remove only visible product IDs
-      // const visibleIds = currentItems.map((item) => item.id);
-
       setSelectedItems((prev) => prev.filter((id) => !visibleIds.includes(id)));
     }
   };
 
-  //////////////////////////////
   const [CategoriesOpen, setCategoriesOpen] = useState(false);
   const [PriceSelected, setPriceSelected] = useState("Categories");
-  /////////////////////////////////
   const [open, setOpen] = useState(false);
 
-  //  Single checkbox toggle
-
+  // Single checkbox toggle
   const handleCheckboxChange = (id) => {
     setSelectedItems(
       (prev) =>
         prev.includes(id)
-          ? prev.filter((x) => x !== id) // unselect
-          : [...prev, id] // select
+          ? prev.filter((x) => x !== id)
+          : [...prev, id]
     );
   };
 
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  // Debounce logic usestate
-
+  // Debounce logic
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search.trim().toLowerCase());
       setCurrentPage(1);
     }, 500);
-
     return () => clearTimeout(timer);
   }, [search]);
 
-  const [filterOpen, setFilterOpen] = useState(false); // main filter
-  const [activeFilter, setActiveFilter] = useState(null); // "status" | "category"
-
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("Status");
   const [selectedCategory, setSelectedCategory] = useState("Category");
 
-  // 🔹 Filter products by debouncedSearch
-  let filteredProducts = productData.filter((p) => {
-    //  Search filter
-    const searchMatch = (p.title || "").toLowerCase().includes(debouncedSearch);
+  // Get unique categories from products
+  const categoriesList = [...new Set(product.map(p => p.category).filter(Boolean))];
 
-    //  Status filter
-    const statusMatch =
-      selectedStatus === "Status" || p.status === selectedStatus;
-
-    //  Category filter
-    const categoryMatch =
-      selectedCategory === "Category" || p.category === selectedCategory;
-
+  // Filter products
+  let filteredProducts = product.filter((p) => {
+    const searchMatch = (p.title || p.productTittle || "").toLowerCase().includes(debouncedSearch);
+    const statusMatch = selectedStatus === "Status" || p.status === selectedStatus;
+    const categoryMatch = selectedCategory === "Category" || p.category === selectedCategory;
     return searchMatch && statusMatch && categoryMatch;
   });
 
   const [selectedSort, setSelectedSort] = useState("Price: Low → High");
-  // Apply category filter
-  const categories = [
-    "Spiritual & Religious Art",
-    "Nature & Wildlife",
-    "Geometric & Abstract",
-    "Wall Arts",
-    "Typography & Symbols",
-    "Clones",
-    "Festival & Occasion",
-    "Reflection Art",
-  ];
 
-  ///////////////////////////////////
   // Sorting options
   const priceOptions = [
     "Price: Low → High",
@@ -376,36 +328,28 @@ const Products = () => {
 
   // Apply sorting
   if (selectedSort === "Price: Low → High") {
-    filteredProducts.sort((a, b) => (a.costPrice || 0) - (b.costPrice || 0));
+    filteredProducts.sort((a, b) => (a.sellingPrice || a.price || 0) - (b.sellingPrice || b.price || 0));
   } else if (selectedSort === "Price: High → Low") {
-    filteredProducts.sort((a, b) => (b.costPrice || 0) - (a.costPrice || 0));
+    filteredProducts.sort((a, b) => (b.sellingPrice || b.price || 0) - (a.sellingPrice || a.price || 0));
   } else if (selectedSort === "Alphabetical (A–Z)") {
-    filteredProducts.sort((a, b) => a.title.localeCompare(b.title));
+    filteredProducts.sort((a, b) => (a.title || a.productTittle || "").localeCompare(b.title || b.productTittle || ""));
   } else if (selectedSort === "Alphabetical (Z–A)") {
-    filteredProducts.sort((a, b) => b.title.localeCompare(a.title));
+    filteredProducts.sort((a, b) => (b.title || b.productTittle || "").localeCompare(a.title || a.productTittle || ""));
   }
 
-  // console.log(filteredProducts);
-
-  /////////////////////////////////
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // 🔹 Then paginate filtered list
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = filteredProducts.slice(startIndex, endIndex);
 
-  //  Check if all visible rows are selected
   const allVisibleSelected =
     currentItems.length > 0 &&
-    currentItems.every((item) => selectedItems.includes(item.id));
-
-  // navigate the section in product detlis page
+    currentItems.every((item) => selectedItems.includes(item._id || item.uuid));
 
   const navigate = useNavigate();
-  //////////////////////////
 
   const dropdownRef = useRef(null);
   const filterRef = useRef(null);
@@ -421,75 +365,97 @@ const Products = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // status  drop down close
+  // Status drop down close
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (filterRef.current && !filterRef.current.contains(event.target)) {
-        setActiveFilter(null); // close status/category
-        setOpen(false); // close price dropdown
+        setActiveFilter(null);
+        setOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // ✅ Get product stats
+  const totalProducts = product.length;
+  const totalCategories = [...new Set(product.map(p => p.category))].length;
+  const activeProducts = product.filter(p => p.status === "Active").length;
+  const draftProducts = product.filter(p => p.status === "Draft").length;
+  const archivedProducts = product.filter(p => p.status === "Archived").length;
+
   const kpicardData = [
     {
       name: "Total Products",
-      data: "45",
+      data: totalProducts,
       icon: <Package />,
       iconbg: "bg-[#D5E5F5]",
       iconColor: "text-[#1C3753]",
     },
     {
       name: "Total Categories",
-      data: "15",
+      data: totalCategories,
       icon: <Layers />,
       iconbg: "bg-[#E5DBFB]",
       iconColor: "text-[#713CE8]",
     },
     {
       name: "Active Products",
-      data: "42",
+      data: activeProducts,
       icon: <PackageCheck />,
       iconbg: "bg-[#F0FDF4]",
       iconColor: "text-[#00A63E]",
     },
     {
       name: "Draft",
-      data: "2",
+      data: draftProducts,
       icon: <FileText />,
       iconbg: "bg-[#EFEFEF]",
       iconColor: "text-[#686868]",
     },
     {
       name: "Archived",
-      data: "1",
+      data: archivedProducts,
       icon: <Archive />,
       iconbg: "bg-[#FFFBEB]",
       iconColor: "text-[#F8A14A]",
     },
   ];
 
-  // const handleEdit = () => {
-  //   navigate(`/admin/add-product/${Editproduct.uuid}`);
-  // };
+  // ✅ Handle delete selected products
+  const handleDeleteSelected = () => {
+    if (selectedItems.length === 0) return;
+    // Filter out selected products
+    const remainingProducts = product.filter(p => 
+      !selectedItems.includes(p._id) && !selectedItems.includes(p.uuid)
+    );
+    setProduct(remainingProducts);
+    setSelectedItems([]);
+  };
 
   return (
     <>
       <div className="p-[24px] bg-[#F6F8F9] rounded-md min-h-screen">
         {/* Header */}
-
         <div className="">
           <div className="flex items-center justify-between">
-            <div className="flex items-center justify-between  16px px-2 rounded-md">
+            <div className="flex items-center justify-between px-2 rounded-md">
               <h2 className="text-[20px] font-semibold text-gray-800">
                 All Products
               </h2>
             </div>
 
-            <div>
+            <div className="flex gap-3">
+              {/* ✅ Delete Button (shows when items selected) */}
+              {deletebtnShow && (
+                <button
+                  onClick={handleDeleteSelected}
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-2"
+                >
+                  <Trash size={16} />
+                  Delete ({selectedItems.length})
+                </button>
+              )}
               <Link to={`/admin/add-product`}>
                 <button className="bg-[#1C3753] text-white px-4 py-2 rounded-lg hover:bg-[#344558]">
                   + Add Product
@@ -498,25 +464,25 @@ const Products = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4  py-6">
+          {/* KPI Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 py-6">
             {kpicardData.map((item, index) => {
               return (
                 <div
                   key={index}
-                  className="relative flex items-center justify-between gap-9
-  p-4 border rounded-2xl bg-white shadow-sm">
+                  className="relative flex items-center justify-between gap-9 p-4 border rounded-2xl bg-white shadow-sm"
+                >
                   <span
                     className="absolute left-0 top-1/2 -translate-y-1/2
                     w-[4px] h-10 bg-blue-500 rounded-r"
                   />
-
                   <div>
                     <div className="text-sm text-gray-500">{item.name}</div>
                     <div className="text-2xl font-semibold">{item.data}</div>
                   </div>
-
                   <div
-                    className={`${item.iconbg} ${item.iconColor} p-[12px] rounded-lg`}>
+                    className={`${item.iconbg} ${item.iconColor} p-[12px] rounded-lg`}
+                  >
                     {item.icon}
                   </div>
                 </div>
@@ -524,41 +490,33 @@ const Products = () => {
             })}
           </div>
         </div>
-        {/* delete in click in item apper */}
-        {/* <div className=" flex items-center justify-end ">
-            {deletebtnShow && (
-              <button className="border px-3 py-2 rounded-lg text-white bg-[#D11A2A] hover:bg-[#F64646] flex items-center justify-center gap-3">
-                <Trash className="w-4 h-4 text-white" />
-                Delete ({selectedItems.length})
-              </button>
-            )}
-          </div> */}
 
         {/* Search + Filters */}
-
         <div className="bg-white p-4 rounded-xl">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex bg-[#F8FBFC] items-center border border-gray-200 rounded-xl px-[16px] py-[13px] hover:bg-white transition-colors duration-200 focus-within:border-blue-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 w-[42%]">
+          <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+            <div className="flex bg-[#F8FBFC] items-center border border-gray-200 rounded-xl px-[16px] py-[13px] hover:bg-white transition-colors duration-200 focus-within:border-blue-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 flex-1 min-w-[250px]">
               <Search className="w-4 h-4 text-gray-500 mr-2" size={20} />
               <input
                 type="text"
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search by product name, SKU ID, Category, Sub-category"
-                className="outline-none flex-1 text-sm  text-gray-700 h-[20px] bg-transparent placeholder-[#686868]  placeholder:text-[16px]"
+                className="outline-none flex-1 text-sm text-gray-700 h-[20px] bg-transparent placeholder-[#686868] placeholder:text-[16px]"
               />
             </div>
 
             <div
               ref={filterRef}
-              className=" relative flex flex-wrap justify-center items-center gap-2 text-[#000000]">
+              className="relative flex flex-wrap justify-center items-center gap-2 text-[#000000]"
+            >
               <button
                 onClick={() =>
                   setActiveFilter((prev) =>
                     prev === "status" ? null : "status"
                   )
                 }
-                className=" border rounded-lg px-4 py-2 flex items-center justify-center gap-6 text-[#686868] bg-[#F8F8F8]">
-                All Status
+                className="border rounded-lg px-4 py-2 flex items-center justify-center gap-6 text-[#686868] bg-[#F8F8F8]"
+              >
+                {selectedStatus === "Status" ? "All Status" : selectedStatus}
                 <ChevronDown />
               </button>
               <button
@@ -567,39 +525,15 @@ const Products = () => {
                     prev === "category" ? null : "category"
                   )
                 }
-                className=" border rounded-lg px-4 py-2 flex items-center justify-center gap-6 text-[#686868] bg-[#F8F8F8]">
-                All Categories
+                className="border rounded-lg px-4 py-2 flex items-center justify-center gap-6 text-[#686868] bg-[#F8F8F8]"
+              >
+                {selectedCategory === "Category" ? "All Categories" : selectedCategory}
                 <ChevronDown />
               </button>
-              <div className="relative inline-block">
-                {filterOpen && (
-                  <div
-                    className="absolute mt-2 right-16 top-9 w-40 bg-white border rounded-lg shadow"
-                    onClick={(e) => e.stopPropagation()}>
-                    <div
-                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center justify-between"
-                      onClick={() => setActiveFilter("status")}>
-                      {selectedStatus === "Status"
-                        ? "All Status"
-                        : selectedStatus}
-                      <ChevronRight className="text-[#686868]" size={"16px"} />
-                    </div>
-
-                    <div
-                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center justify-between"
-                      onClick={() => setActiveFilter("category")}>
-                      {selectedCategory === "Category"
-                        ? "All Categories"
-                        : selectedCategory}
-                      <ChevronRight className="text-[#686868]" size={"16px"} />
-                    </div>
-                  </div>
-                )}
-              </div>
 
               {activeFilter === "status" && (
                 <div className="absolute left-0 top-11 ml-2 w-36 z-30">
-                  <ul className=" bg-white border rounded-lg shadow">
+                  <ul className="bg-white border rounded-lg shadow">
                     {["Active", "Draft", "Archived"].map((status) => (
                       <li
                         key={status}
@@ -607,7 +541,8 @@ const Products = () => {
                           setSelectedStatus(status);
                           setActiveFilter(null);
                         }}
-                        className="px-4 py-2 cursor-pointer hover:bg-[#F5F8FA]">
+                        className="px-4 py-2 cursor-pointer hover:bg-[#F5F8FA]"
+                      >
                         {status}
                       </li>
                     ))}
@@ -618,14 +553,15 @@ const Products = () => {
               {activeFilter === "category" && (
                 <div className="absolute left-40 top-11 ml-2 w-64 z-30">
                   <ul className="bg-white border rounded-lg shadow max-h-60 overflow-auto">
-                    {categories.map((cat) => (
+                    {categoriesList.map((cat) => (
                       <li
                         key={cat}
                         onClick={() => {
                           setSelectedCategory(cat);
                           setActiveFilter(null);
                         }}
-                        className="px-4 py-2 cursor-pointer hover:bg-[#F5F8FA]">
+                        className="px-4 py-2 cursor-pointer hover:bg-[#F5F8FA]"
+                      >
                         {cat}
                       </li>
                     ))}
@@ -634,22 +570,21 @@ const Products = () => {
               )}
 
               {/* Price Dropdown */}
-              <div className="relative inline-block" ref={filterRef}>
+              <div className="relative inline-block" ref={dropdownRef}>
                 <button
                   onClick={() => setOpen((prev) => !prev)}
-                  className="w-full border rounded-lg px-4 py-2 flex items-center justify-center gap-6 bg-[#F8F8F8] text-[15px] text-[#686868] focus:outline-none">
-                  <ListMinus
-                    size={18}
-                    className={`text-gray-500 transition-transform duration-200 ${
-                      open ? "rotate-180" : ""
-                    }`}
-                  />
+                  className="w-full border rounded-lg px-4 py-2 flex items-center justify-center gap-6 bg-[#F8F8F8] text-[15px] text-[#686868] focus:outline-none"
+                >
+                  <ListMinus size={18} className="text-gray-500" />
                   <span>{selectedSort}</span>
+                  <ChevronDown
+                    size={14}
+                    className={`transition-transform ${open ? "rotate-180" : ""}`}
+                  />
                 </button>
 
-                {/* Price Dropdown Menu */}
                 {open && (
-                  <ul className="absolute  z-10 mt-1 w-52 border rounded-lg bg-white shadow-md max-h-60 overflow-y-auto text-[15px]">
+                  <ul className="absolute z-10 mt-1 w-52 border rounded-lg bg-white shadow-md max-h-60 overflow-y-auto text-[15px]">
                     {priceOptions.map((p, i) => (
                       <li
                         key={i}
@@ -659,21 +594,25 @@ const Products = () => {
                         }}
                         className={`flex items-center justify-between px-4 py-2 hover:bg-[#F5F8FA] cursor-pointer ${
                           selectedSort === p ? "bg-gray-100 text-gray-900" : ""
-                        }`}>
+                        }`}
+                      >
                         <span className="text-[#686868]">{p}</span>
                       </li>
                     ))}
                   </ul>
                 )}
               </div>
+
               <button
                 onClick={() => {
                   setSelectedSort("Price: Low → High");
                   setSelectedCategory("Category");
                   setSelectedStatus("Status");
+                  setSearch("");
+                  setDebouncedSearch("");
                 }}
-                className="text-[#1C3753] flex items-center justify-between gap-2">
-                {/* <FunnelX size={18} /> */}
+                className="text-[#1C3753] flex items-center justify-between gap-2 hover:underline"
+              >
                 Clear Filter
               </button>
             </div>
@@ -684,255 +623,125 @@ const Products = () => {
             <table className="w-full text-sm text-left text-gray-600">
               <thead className="bg-[#F8F8F8] h-[54px]">
                 <tr className="text-[#4B5563] text-[18px]">
-                  {/* // header ka input ha yaa */}
-                  {/* <th className="px-4 py-3"> */}
-                  {/* <input
-                      type="checkbox"
-                      onChange={handleSelectAll}
-                      checked={
-                        currentItems.length > 0 &&
-                        currentItems.every((item) =>
-                          selectedItems.includes(item.id || item.uuid)
-                        ) &&
-                        currentItems.length > 0
-                      }
-                      className="w-4 h-4"
-                    /> */}
-                  {/* </th> */}
-                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">
-                    Product
-                  </th>
-                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">
-                    SKU ID
-                  </th>
-                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">
-                    Category
-                  </th>
-                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">
-                    Price
-                  </th>
-                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">
-                    Variants
-                  </th>
-                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">
-                    Status
-                  </th>
-                  {/* <th className="px-4 py-3 font-normal text-[#1C1C1C]">
-                    Selling Price{" "}
-                  </th>
-                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">
-                    Cost Price{" "}
-                  </th> */}
-                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">
-                    Action
-                  </th>
+                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">Product</th>
+                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">SKU ID</th>
+                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">Category</th>
+                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">Price</th>
+                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">Variants</th>
+                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">Status</th>
+                  <th className="px-4 py-3 font-normal text-[#1C1C1C]">Action</th>
                 </tr>
               </thead>
 
               <tbody>
-                {currentItems.map((item) => (
-                  <tr
-                    key={item.uuid || item.id || item.route}
-                    className={`border-t hover:bg-gray-50 transition ${
-                      selectedItems.includes(item.id) ? "bg-red-50" : ""
-                    }`}
-                    onClick={(e) => {
-                      if (
-                        e.target.tagName !== "INPUT" &&
-                        e.target.tagName !== "BUTTON" &&
-                        e.target.tagName !== "svg" &&
-                        e.target.tagName !== "path"
-                      ) {
-                        // navigate(`/admin/product-info/:uuid${item.sku}`);
-                        // navigate(`/admin/product-info/${item.uuid}`);
-                      }
-                    }}>
-                    {/* <td className="px-4 py-3"> */}
-                    {/* <input
-                        type="checkbox"
-                        checked={selectedItems.includes(item.id || item.uuid)}
-                        onChange={() =>
-                          handleCheckboxChange(item.id || item.uuid)
-                        }
-                        className="w-4 h-4"
-                      /> */}
-                    {/* </td> */}
+                {currentItems.length > 0 ? (
+                  currentItems.map((item) => (
+                    <tr
+                      key={item.uuid || item._id}
+                      className={`border-t hover:bg-gray-50 transition ${
+                        selectedItems.includes(item._id || item.uuid) ? "bg-red-50" : ""
+                      }`}
+                    >
+                      <td className="px-0 py-4">
+                        <div className="flex items-center justify-start gap-2">
+                          <div className="h-[50px] w-[50px] ml-2 bg-[#EFEFEF] p-1 rounded-md overflow-hidden">
+                            <img
+                              className="h-full w-full object-cover object-center"
+                              src={item.images?.[0] || "/placeholder.jpg"}
+                              alt={item.title || item.productTittle}
+                              onError={(e) => { e.target.src = "/placeholder.jpg"; }}
+                            />
+                          </div>
+                          <div>
+                            <span className="text-[#1F2937] text-[16px] font-medium cursor-pointer">
+                              {(item.title || item.productTittle || "").split(" ").length > 3
+                                ? (item.title || item.productTittle || "").split(" ").slice(0, 3).join(" ") + "..."
+                                : (item.title || item.productTittle || "")}
+                            </span>
+                          </div>
+                        </div>
+                       </td>
 
-                    <td className="px-0 py-4">
-                      <div className="flex items-center justify-start gap-2">
-                        <div className="h-[50px] w-[50px] ml-2 bg-[#EFEFEF] p-1 rounded-md overflow-hidden">
-                          <img
-                            className="h-full w-full object-cover object-center"
-                            src={item.images[0]}
-                            alt={item.title}
-                          />
-                        </div>
+                      <td className="px-4 py-3 text-[16px] text-[#1F2937]">
+                        {item.SKU || "N/A"}
+                       </td>
+                      <td className="px-4 py-3 text-[16px] text-[#1F2937]">
+                        {item.category || "-"}
+                       </td>
+                      <td className="px-4 py-3 text-[16px] text-[#1F2937]">
+                        ₹{item.sellingPrice || item.price || 0}
+                       </td>
+                      <td className="px-4 py-3 text-[16px] text-[#1F2937]">
+                        {item.variants?.length || 1}
+                       </td>
+                      <td className="px-4 py-3 text-[16px] text-[#1F2937]">
+                        {item.status === "Active" ? (
+                          <div className="flex items-center justify-center gap-2 bg-[#E0F4DE] py-1.5 px-2 rounded-lg text-sm text-[#00A63E]">
+                            <Circle fill="#00A63E" color="#00A63E" size={"12px"} />
+                            Active
+                          </div>
+                        ) : item.status === "Draft" ? (
+                          <div className="flex items-center justify-center gap-2 bg-[#EFEFEF] py-1.5 px-3 rounded-lg text-sm text-[#686868]">
+                            <Circle fill="#686868" color="#686868" size={"12px"} />
+                            Draft
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center gap-2 bg-[#FFFBEB] py-1.5 px-3 rounded-lg text-sm text-[#F8A14A]">
+                            <Circle fill="#F8A14A" color="#F8A14A" size={"12px"} />
+                            Archived
+                          </div>
+                        )}
+                       </td>
 
-                        <div>
-                          <span className="text-[#1F2937]  text-[16px] font-medium cursor-pointer">
-                            {item.title.split(" ").length > 3
-                              ? item.title.split(" ").slice(0, 3).join(" ") +
-                                "..."
-                              : item.title}
-                          </span>
-                          {/* <div>
-                            <p className="text-[14px] text-[#5D5D5D]">
-                              {item.variants
-                                .slice(0, 2) // show only first 2
-                                .map((v) => v.variantValue)
-                                .join(", ")}
-                              {item.variants.length > 2 && (
-                                <span className="text-[#5D5D5D]">
-                                  {" "}
-                                  +{item.variants.length - 2} more
-                                </span>
-                              )}
-                            </p>
-                          </div> */}
+                      <td className="px-0 py-3">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/admin/product-info/${item.uuid || item._id}`);
+                            }}
+                            className="relative p-2 rounded group text-[#2C87E2] hover:underline flex items-center gap-1"
+                          >
+                            <Eye size={16} />
+                            view
+                          </button>
                         </div>
-                      </div>
-                    </td>
-
-                    <td className="px-4 py-3 text-[16px] text-[#1F2937]">
-                      {item.SKU}
-                    </td>
-                    <td className="px-4 py-3 text-[16px] text-[#1F2937]">
-                      {item.category}
-                    </td>
-                    <td className="px-4 py-3 text-[16px] text-[#1F2937]">
-                      ₹{item.sellingPrice}
-                    </td>
-                    {/* <td className="px-4 py-3 text-[16px] text-[#1F2937]">
-                      {item.sellingPrice === 0 ? (
-                        <div className="text-red-500 font-semibold">
-                          Out of Stock
-                        </div>
-                      ) : item.sellingPrice <= 10 ? (
-                        <div className="text-yellow-500 font-semibold">
-                          Low Stock
-                        </div>
-                      ) : (
-                        <div className="text-green-600 font-semibold">
-                          In Stock
-                        </div>
-                      )}
-                    </td> */}
-                     <td className="px-4 py-3 text-[16px] text-[#1F2937]">
-                     4
-                    </td>
-                    <td className="px-4 py-3 text-[16px] text-[#1F2937]">
-                      {item.status === "Active" ? (
-                        <div className="flex items-center justify-center gap-2 bg-[#E0F4DE] py-1.5 px-2 rounded-lg text-sm text-[#00A63E]">
-                          <Circle
-                            fill="#00A63E"
-                            color="#00A63E"
-                            size={"12px"}
-                            className=""
-                          />
-                          Active
-                        </div>
-                      ) : item.status === "Draft" ? (
-                        <div className="flex items-center justify-center gap-2 bg-[#EFEFEF] py-1.5 px-3 rounded-lg text-sm text-[#686868]">
-                          <Circle
-                            fill="#686868"
-                            color="#686868"
-                            size={"12px"}
-                            className=""
-                          />
-                          Draft
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center gap-2 bg-[#FFFBEB] py-1.5 px-3 rounded-lg text-sm text-[#F8A14A]">
-                          <Circle
-                            fill="#F8A14A"
-                            color="#F8A14A"
-                            size={"12px"}
-                            className=""
-                          />
-                          Archived
-                        </div>
-                      )}
-                    </td>
-
-                    {/* <td className="px-4 py-3 text-[16px] text-[#1F2937]">
-                      ₹{item.sellingPrice}
-                    </td>
-                    <td className="px-4 py-3 text-[16px] text-[#1F2937]">
-                      ₹{item.costPrice}
-                    </td> */}
-
-                    {/* Centered action icons (hidden until hover) */}
-                    <td className="px-0 py-3">
-                      <div className="flex items-center justify-center gap-2 ">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // navigate(`/admin/add-product/${item.uuid}`);
-                            navigate(`/admin/product-info/${item.uuid}`);
-                          }}
-                          className="relative p-2 rounded group text-[#2C87E2] hover:underline">
-                          {/* <PencilLine className="w-5 h-5 text-gray-900" /> */}
-                          view
-
-                          {/* <div
-                            className="
-      absolute left-1/2 top-10 -translate-x-1/2
-      bg-[#F5F8FA] py-1 px-3 rounded-lg
-      text-xs font-medium
-      opacity-0
-      group-hover:opacity-100
-      transition-opacity duration-200
-      whitespace-nowrap
-      pointer-events-none
-    ">
-                            Edit
-                          </div> */}
-                        </button>
-
-                        {/* <button className="p-2 rounded">
-                          <CopyCheck className="w-5 h-5 text-[#1C1C1C]" />
-                        </button> */}
-                      </div>
+                       </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="text-center py-10 text-gray-500">
+                      No products found
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
 
             {/* Pagination */}
-            <div className="flex justify-end items-center gap-2 px-6 py-4 border-t">
-              <button
-                className="px-3 py-1 border rounded"
-                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-                disabled={currentPage === 1}>
-                ‹
-              </button>
-              {/* {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <button
-                    key={page}
-                    className={`px-3 py-1 border rounded ${
-                      page === currentPage ? "bg-[#212121] text-white" : ""
-                    }`}
-                    onClick={() => setCurrentPage(page)}>
-                    {page}
-                  </button>
-                )
-              )} */}
-              <div className="px-4 py-1.5 border rounded text-sm text-gray-700">
-                Page {String(currentPage).padStart(2, "0")} of{" "}
-                {String(totalPages).padStart(2, "0")}
+            {totalPages > 1 && (
+              <div className="flex justify-end items-center gap-2 px-6 py-4 border-t">
+                <button
+                  className="px-3 py-1 border rounded hover:bg-gray-50"
+                  onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  ‹
+                </button>
+                <div className="px-4 py-1.5 border rounded text-sm text-gray-700">
+                  Page {String(currentPage).padStart(2, "0")} of{" "}
+                  {String(totalPages).padStart(2, "0")}
+                </div>
+                <button
+                  className="px-3 py-1 border rounded hover:bg-gray-50"
+                  onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  ›
+                </button>
               </div>
-
-              <button
-                className="px-3 py-1 border rounded"
-                onClick={() =>
-                  setCurrentPage((p) => Math.min(p + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}>
-                ›
-              </button>
-            </div>
+            )}
           </div>
         </div>
       </div>

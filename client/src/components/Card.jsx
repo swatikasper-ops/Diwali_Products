@@ -60,22 +60,18 @@ function Card({ cardData = [] }) {
     }, 200);
   };
 
-  const getSafeImage = (variant, product) => {
-    let img = null;
-
-    // 1. Variant-level image
-    if (variant?.variantImage?.length > 0) {
-      img = variant.variantImage[0];
-    }
-
-    // 2. Product-level images
-    if (!img && product?.images?.length > 0) {
-      img = product.images[0];
-    }
-
-    // 3. Final fallback
-    return img || "/placeholder.png";
-  };
+// Fix image URL in getSafeImage function (line ~63)
+const getSafeImage = (variant, product) => {
+  let img = null;
+  if (variant?.variantImage?.length > 0) {
+    img = variant.variantImage[0];
+  }
+  if (!img && product?.images?.length > 0) {
+    img = product.images[0];
+  }
+  // ✅ Remove localhost:5000 prefix - just return the path
+  return img || "/placeholder.png";
+};
 
   return (
     <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-3 grid-cols-2 gap-2 w-full place-content-between overflow-visible">
@@ -179,13 +175,7 @@ function Card({ cardData = [] }) {
               </button>
               <img
                 className="lg:min-h-[202px] pt-2 sm:min-w-[207px] sm:min-h-[160px] max-w-40 max-h-40 object-contain lg:group-hover:scale-110 transition duration-300 bg-white"
-                src={
-                  imageUrl.startsWith("http")
-                    ? imageUrl
-                    : imageUrl.startsWith("/")
-                      ? imageUrl
-                      : `http://localhost:5000${imageUrl}`
-                }
+                src={imageUrl}
                 alt={item?.title || "Product"}
               />
 

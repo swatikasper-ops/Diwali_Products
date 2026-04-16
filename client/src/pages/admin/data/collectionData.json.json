@@ -1,0 +1,168 @@
+{
+  "Chocolate Hampers": [
+    {
+      "_id": "choc_1",
+      "productTittle": "Premium Belgian Chocolate Box",
+      "price": 1299,
+      "mrp": 1699,
+      "rating": 4.8,
+      "reviews": 120,
+      "image": "/Diwali/Choclates_hampers.jpg",
+      "category": "Chocolate Hampers",
+      "subcategory": "Belgian Chocolates",
+      "description": "Assorted Belgian chocolates in premium gift box",
+      "inStock": true
+    },
+    {
+      "_id": "choc_2",
+      "productTittle": "Lindt Chocolate Gift Hamper",
+      "price": 2499,
+      "mrp": 3299,
+      "rating": 4.9,
+      "reviews": 95,
+      "image": "/Diwali/Choclates_hampers.jpg",
+      "category": "Chocolate Hampers",
+      "subcategory": "Premium Chocolates",
+      "description": "Lindt chocolate collection with gift wrapping",
+      "inStock": true
+    },
+    {
+      "_id": "choc_3",
+      "productTittle": "Dark Chocolate Assortment",
+      "price": 899,
+      "mrp": 1199,
+      "rating": 4.7,
+      "reviews": 78,
+      "image": "/Diwali/Choclates_hampers.jpg",
+      "category": "Chocolate Hampers",
+      "subcategory": "Dark Chocolates",
+      "description": "Premium dark chocolate assortment",
+      "inStock": true
+    },
+    {
+      "_id": "choc_4",
+      "productTittle": "Ferrero Rocher Collection",
+      "price": 1599,
+      "mrp": 1999,
+      "rating": 4.8,
+      "reviews": 110,
+      "image": "/Diwali/Choclates_hampers.jpg",
+      "category": "Chocolate Hampers",
+      "subcategory": "Italian Chocolates",
+      "description": "Ferrero Rocher 24 pcs gift box",
+      "inStock": true
+    }
+  ],
+  "Dry Fruits": [
+    {
+      "_id": "dry_1",
+      "productTittle": "Premium Dry Fruits Gift Pack",
+      "price": 1499,
+      "mrp": 1899,
+      "rating": 4.8,
+      "reviews": 110,
+      "image": "/Diwali/Dryfruits.jpg",
+      "category": "Dry Fruits",
+      "subcategory": "Premium Nuts",
+      "description": "Assorted premium dry fruits gift pack",
+      "inStock": true
+    },
+    {
+      "_id": "dry_2",
+      "productTittle": "Luxury Nuts & Berries Box",
+      "price": 2499,
+      "mrp": 3199,
+      "rating": 4.9,
+      "reviews": 85,
+      "image": "/Diwali/Dryfruits.jpg",
+      "category": "Dry Fruits",
+      "subcategory": "Premium Mix",
+      "description": "Premium nuts and berries gift box",
+      "inStock": true
+    }
+  ],
+  "Festive Hampers": [
+    {
+      "_id": "fest_1",
+      "productTittle": "Grand Diwali Hamper",
+      "price": 2799,
+      "mrp": 3499,
+      "rating": 4.9,
+      "reviews": 200,
+      "image": "/Diwali/hampers.jpg",
+      "category": "Festive Hampers",
+      "subcategory": "Premium Hampers",
+      "description": "Complete Diwali hamper with sweets, dry fruits & gifts",
+      "inStock": true
+    },
+    {
+      "_id": "fest_2",
+      "productTittle": "Premium Festive Gift Box",
+      "price": 3999,
+      "mrp": 4999,
+      "rating": 4.8,
+      "reviews": 150,
+      "image": "/Diwali/hampers.jpg",
+      "category": "Festive Hampers",
+      "subcategory": "Luxury Gifts",
+      "description": "Luxury festive gift box with premium items",
+      "inStock": true
+    }
+  ],
+  "Corporate Gifts": [
+    {
+      "_id": "corp_1",
+      "productTittle": "Executive Corporate Hamper",
+      "price": 4999,
+      "mrp": 6499,
+      "rating": 4.9,
+      "reviews": 234,
+      "image": "/Diwali/Corporate_gifts.jpg",
+      "category": "Corporate Gifts",
+      "subcategory": "Executive Gifts",
+      "description": "Premium corporate hamper for executives",
+      "inStock": true
+    },
+    {
+      "_id": "corp_2",
+      "productTittle": "Premium Business Gift Set",
+      "price": 3999,
+      "mrp": 4999,
+      "rating": 4.8,
+      "reviews": 187,
+      "image": "/Diwali/Corporate_gifts.jpg",
+      "category": "Corporate Gifts",
+      "subcategory": "Business Gifts",
+      "description": "Elegant business gift set for clients",
+      "inStock": true
+    }
+  ],
+  "Home Decor": [
+    {
+      "_id": "decor_1",
+      "productTittle": "Festive Wall Hangings",
+      "price": 899,
+      "mrp": 1199,
+      "rating": 4.5,
+      "reviews": 95,
+      "image": "/Diwali/Home_decor.jpg",
+      "category": "Home Decor",
+      "subcategory": "Wall Decor",
+      "description": "Beautiful festive wall hangings",
+      "inStock": true
+    },
+    {
+      "_id": "decor_2",
+      "productTittle": "LED Curtain Lights",
+      "price": 699,
+      "mrp": 999,
+      "rating": 4.8,
+      "reviews": 145,
+      "image": "/Diwali/Home_decor.jpg",
+      "category": "Home Decor",
+      "subcategory": "Lighting",
+      "description": "Decorative LED curtain lights",
+      "inStock": true
+    }
+  ]
+}

@@ -5,7 +5,8 @@ import Sweets from "../../assets/Diwali/Sweets.jpg";
 import Dryfruits from "../../assets/Diwali/Dryfruits.jpg";
 import Corporate_gifts from "../../assets/Diwali/Corporate_gifts.jpg";
 import Hampers_gift from "../../assets/Diwali/Hampers_gift.jpg";
-import Card from "../../components/Card"; 
+import Card from "../../components/Card";
+import { getProductsByCategory } from "../../data/dummyData"; 
 
 // 🔴 DUMMY PRODUCTS DATA (matching Card component structure)
 const allProducts = [
@@ -285,9 +286,9 @@ function Design() {
     setShowProducts(true);
   };
 
-  const filteredProducts = selectedCategory 
-    ? allProducts.filter(p => p.category === selectedCategory)
-    : [];
+const filteredProducts = selectedCategory 
+  ? getProductsByCategory(selectedCategory)
+  : [];
 
   return (
     <>

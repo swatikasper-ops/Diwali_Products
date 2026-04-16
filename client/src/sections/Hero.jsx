@@ -60,18 +60,19 @@ function Hero() {
 
             <div className="flex gap-4 flex-wrap justify-center md:justify-start mt-4">
               {/* 🔥 CORPORATE GIFTS BUTTON - Click to filter */}
-              <button
-                onClick={() => {
-                  navigate("/products", { 
-                    state: { 
-                      filterCategory: "Diwali Hampers"
-                    } 
-                  });
-                }}
-                className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-[#1C3753] rounded-lg font-semibold flex items-center gap-2 hover:gap-3 transition-all shadow-lg"
-              >
-                Corporate Gifts <ArrowRight />
-              </button>
+              // src/sections/Hero.jsx - Fix the button
+<button
+  onClick={() => {
+    navigate("/products", { 
+      state: { 
+        filterCategory: "Corporate Gifts"  // ✅ Exact category name
+      } 
+    });
+  }}
+  className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-[#1C3753] rounded-lg font-semibold flex items-center gap-2 hover:gap-3 transition-all shadow-lg"
+>
+  Corporate Gifts <ArrowRight />
+</button>
 
               {/* FAMILY GIFTS BUTTON */}
               <button

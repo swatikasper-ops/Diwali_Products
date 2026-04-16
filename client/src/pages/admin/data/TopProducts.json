@@ -1,40 +1,58 @@
 [
   {
-    "_id": "1",
+    "_id": "top_1",
+    "uuid": "top_1",
+    "title": "Luxury Aromatherapy Wellness Kit",
     "productTittle": "Luxury Aromatherapy Wellness Kit",
+    "category": "Corporate Gifts",
     "price": 2799,
     "mrp": 3499,
     "rating": 4.9,
-    "reviews": 180,
-    "image": "/Diwali/Luxary_set.webp"
+    "reviews": [{"rating": 5}, {"rating": 5}],
+    "images": ["/Diwali/Luxary_set.webp"],
+    "variants": [{"variantImage": ["/Diwali/Luxary_set.webp"], "variantId": "top_1", "price": 2799, "variantQuantity": 15}],
+    "description": "Luxury aromatherapy wellness kit"
   },
   {
-    "_id": "2",
+    "_id": "top_2",
+    "uuid": "top_2",
+    "title": "Smart Desk Organizer Gift Set",
     "productTittle": "Smart Desk Organizer Gift Set",
+    "category": "Corporate Gifts",
     "price": 1999,
     "mrp": 2599,
     "rating": 4.8,
-    "reviews": 150,
-    "image": "/Diwali/desk_organizer.jpeg"
+    "reviews": [{"rating": 5}, {"rating": 4}],
+    "images": ["/Diwali/desk_organizer.jpeg"],
+    "variants": [{"variantImage": ["/Diwali/desk_organizer.jpeg"], "variantId": "top_2", "price": 1999, "variantQuantity": 40}],
+    "description": "Smart desk organizer gift set"
   },
   {
-    "_id": "4",
+    "_id": "top_3",
+    "uuid": "top_3",
+    "title": "Luxury Corporate Hamper",
+    "productTittle": "Luxury Corporate Hamper",
+    "category": "Corporate Gifts",
+    "price": 1999,
+    "mrp": 2499,
+    "rating": 4.9,
+    "reviews": [{"rating": 5}, {"rating": 5}],
+    "images": ["/Diwali/Premium_hampers.jpg"],
+    "variants": [{"variantImage": ["/Diwali/Premium_hampers.jpg"], "variantId": "top_3", "price": 1999, "variantQuantity": 20}],
+    "description": "Luxury corporate hamper"
+  },
+  {
+    "_id": "top_4",
+    "uuid": "top_4",
+    "title": "Minimal Scandinavian Gift Box",
     "productTittle": "Minimal Scandinavian Gift Box",
+    "category": "Corporate Gifts",
     "price": 1799,
     "mrp": 2299,
     "rating": 4.6,
-    "reviews": 100,
-    "image": "/Diwali/gifts_box.webp"
-  },
-  {
-    "_id": "6",
-    "productTittle": "Ambient Festive Light Box",
-    "price": 1299,
-    "mrp": 1699,
-    "rating": 4.5,
-    "reviews": 75,
-    "image": "/Diwali/light_box.jpg"
+    "reviews": [{"rating": 5}, {"rating": 4}],
+    "images": ["/Diwali/gifts_box.webp"],
+    "variants": [{"variantImage": ["/Diwali/gifts_box.webp"], "variantId": "top_4", "price": 1799, "variantQuantity": 35}],
+    "description": "Minimal Scandinavian gift box"
   }
-
-  
 ]

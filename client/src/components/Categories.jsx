@@ -1,177 +1,96 @@
 import React, { useEffect, useState } from "react";
-import { ChevronRight } from "lucide-react";
-import { useNavigate, useParams } from "react-router";
-import { twMerge } from "tailwind-merge";
-import products from "../data/products.json";
+import { Link } from "react-router";
+import categoryProducts from "../pages/admin/data/Catagories.json";
 
-function Categories({
-  filters = false,
-  setParam = () => {},
-  val = "",
-  colors = "",
-  setColor = "",
-}) {
-  const [selected, setSelected] = useState("All");
-  const [price, setPrice] = useState(60);
-  const [filter, setFilter] = useState([]);
-  const navigate = useNavigate();
+function CategoryProducts() {
+  const [visibleCount, setVisibleCount] = useState(4);
 
-  const handleChange = (event, newValue) => {
-    setPrice(newValue);
+  useEffect(() => {
+    const updateCount = () => {
+      if (window.innerWidth >= 1024) setVisibleCount(6);
+      else if (window.innerWidth >= 640) setVisibleCount(4);
+      else setVisibleCount(3);
+    };
+    updateCount();
+    window.addEventListener("resize", updateCount);
+    return () => window.removeEventListener("resize", updateCount);
+  }, []);
+
+  // Group products by category
+  const groupedProducts = categoryProducts.reduce((acc, product) => {
+    if (!acc[product.category]) acc[product.category] = [];
+    acc[product.category].push(product);
+    return acc;
+  }, {});
+
+  const discountPercent = (mrp, price) => {
+    if (!mrp || !price) return 0;
+    return Math.round(((mrp - price) / mrp) * 100);
   };
-  const { categoryName, subcategoryName } = useParams()
-
-  // Extract subcategories for the given categoryName
-  useEffect(() => {
-    if (Array.isArray(products)) {
-      const matchedSubcategories = [
-        "All",
-        ...new Set(
-          products
-            .filter(
-              (item) =>
-                item.category.trim().toLowerCase() ===
-                categoryName.trim().toLowerCase()
-            )
-            .map((item) => item.subcategory?.trim())
-            .filter(Boolean) // remove undefined/null
-        ),
-      ];
-
-      setFilter(matchedSubcategories);
-    }
-  }, [categoryName]);
-
-  // Sync selected filter from props
-  useEffect(() => {
-    setParam(val || "");
-    setSelected(val || "All");
-  }, [val, setParam]);
-
-  useEffect(() => {
-    if (subcategoryName) {
-      setSelected(decodeURIComponent(subcategoryName));
-    } else {
-      setSelected("All"); // default when no subcategory
-    }
-    // console.log(subcategoryName)
-  }, [subcategoryName]);
-
 
   return (
-    <div className="min-w-[223px] bg-white lg:block hidden border border-gray-200 p-2 pb-6">
-      {filter.length > 0 && (
-        <div className="w-[195px] flex justify-between border-b border-black py-2">
-          <h1 className="text-[15px] font-[500] px-2">Categories</h1>
-          <ChevronRight />
-        </div>
-      )}
+    <div className="bg-gradient-to-b from-orange-50 via-white to-yellow-50 py-6 px-3 md:px-8">
+      <div className="text-center mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold text-orange-600">
+          Explore Diwali Categories
+        </h1>
+        <p className="text-gray-500 text-sm mt-1">Shop by category for your festive needs</p>
+      </div>
 
-      {/* Subcategories list */}
-      <div className="p-2">
-        {filter.map((subcat, index) => (
-          <div
-            key={index}
-            className="max-w-[200px] flex items-center gap-2 cursor-pointer mb-2"
-            onClick={() => {
-              setSelected(subcat)
-              navigate(
-                `/products/${encodeURIComponent(categoryName)}/${
-                  subcat === "All" ? "" : encodeURIComponent(subcat)
-                }`
-              );
-            }}
-          >
-            {selected === subcat ? (
-              <div className="relative min-w-4 min-h-4">
-                {/* Outer Gradient Ring */}
-                <div
-                  className="absolute inset-0 rounded-full"
-                  style={{
-                    background:
-                      "linear-gradient(to bottom, #CBA11A, #C8A112, #E2CF47, #EECD4E, #D6AD1D, #DFBA30)",
-                  }}
-                ></div>
-                {/* Inner Circle */}
-                <div className="top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-3 h-3 absolute border-2 border-white rounded-full"></div>
+      <div className="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+        {Object.entries(groupedProducts)
+          .slice(0, visibleCount)
+          .map(([category, items]) => (
+            <div key={category} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-4 border border-gray-200">
+              <div className="flex justify-between items-center mb-3">
+                <h2 className="text-lg md:text-xl font-semibold text-gray-800">{category}</h2>
+                <Link to={`/products/${encodeURIComponent(category)}`} className="text-[#1C3753] text-sm hover:underline">
+                  View All →
+                </Link>
               </div>
-            ) : (
-              <div className="min-w-4 min-h-4 rounded-full border border-[#989898]"></div>
-            )}
-            <p className="text-sm text-[#6d6d6d]">{subcat}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Colors */}
-      <div className="w-[195px] flex flex-col gap-6">
-        <div className="flex justify-between border-b border-black py-2">
-          <h1 className="text-[15px] font-[500] px-2">Colors</h1>
-          <ChevronRight />
-        </div>
-        <div className="flex gap-4 px-3">
-          {colors.map(({ colorName, colorCode }) => (
-            <div
-              key={colorName}
-              className={twMerge(
-                "w-4 h-4 rounded-full ring-2 ring-[#BEBEBE] ring-offset-2 cursor-pointer",
-                colorCode
-              )}
-              onClick={() =>
-                setColor((prev) => (prev === colorName ? "" : colorName))
-              }
-            ></div>
+              <div className="grid grid-cols-2 gap-3">
+                {items.slice(0, 4).map((p) => {
+                  const discount = discountPercent(p.mrp, p.price);
+                  const imageUrl = p.images?.[0] || p.variants?.[0]?.variantImage?.[0] || "/placeholder.jpg";
+                  
+                  return (
+                    <Link key={p._id} to={`/product/${p._id}`} className="group">
+                      <div className="rounded-lg overflow-hidden bg-gray-50 p-2 hover:bg-gray-100 transition">
+                        <div className="relative aspect-square overflow-hidden rounded-md bg-white">
+                          <img 
+                            src={imageUrl} 
+                            alt={p.productTittle} 
+                            className="w-full h-full object-cover group-hover:scale-110 transition duration-300" 
+                            onError={(e) => { e.target.src = "/placeholder.jpg"; }}
+                          />
+                          {discount > 0 && (
+                            <span className="absolute top-1 right-1 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">
+                              {discount}% OFF
+                            </span>
+                          )}
+                          {p.rating && (
+                            <span className="absolute bottom-1 left-1 bg-yellow-400 text-[10px] px-1.5 py-0.5 rounded-full font-medium">
+                              {p.rating} ★
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="text-xs mt-2 text-center line-clamp-1 font-medium text-gray-700 group-hover:text-[#1C3753] transition">
+                          {p.productTittle}
+                        </h3>
+                        <div className="flex items-center justify-center gap-1 mt-1">
+                          <span className="text-xs font-bold text-gray-800">₹{p.price || p.sellingPrice}</span>
+                          <span className="text-[10px] text-gray-400 line-through">₹{p.mrp || p.basePrice}</span>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           ))}
-        </div>
       </div>
-
-      {/* Price filter */}
-      {/* <div className="p-2 flex flex-col gap-2 w-[195px]">
-        <p>Price</p>
-        <Slider
-          value={price}
-          onChange={handleChange}
-          valueLabelDisplay="auto"
-          min={0}
-          max={100}
-          sx={{
-            color: "#434343",
-            height: 4,
-            "& .MuiSlider-thumb": {
-              width: 12,
-              height: 12,
-              backgroundColor: "#fff",
-              border: "3px solid currentColor",
-              "&:hover": {
-                boxShadow: "0 0 0 6px rgba(203, 161, 26, 0.16)",
-              },
-            },
-            "& .MuiSlider-track": { height: 4, border: "none" },
-            "& .MuiSlider-rail": {
-              height: 4,
-              opacity: 0.5,
-              backgroundColor: "#E0E0E0",
-            },
-            "& .MuiSlider-valueLabel": {
-              backgroundColor: "#434343",
-              color: "#fff",
-              fontSize: "10px",
-              borderRadius: "4px",
-              top: -6,
-            },
-          }}
-        />
-        <div className="flex justify-between w-[195px]">
-          <button className="border w-[73px] h-[28px] text-start px-2 border-[#868686] rounded-[5px]">
-            ₹
-          </button>
-          <button className="border w-[73px] h-[28px] text-start mr-[10px] px-2 border-[#868686] rounded-[5px]">
-            ₹
-          </button>
-        </div>
-      </div> */}
     </div>
   );
 }
 
-export default Categories;
+export default CategoryProducts;
