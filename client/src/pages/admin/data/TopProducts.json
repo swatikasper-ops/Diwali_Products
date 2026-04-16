@@ -1,0 +1,40 @@
+[
+  {
+    "_id": "1",
+    "productTittle": "Luxury Aromatherapy Wellness Kit",
+    "price": 2799,
+    "mrp": 3499,
+    "rating": 4.9,
+    "reviews": 180,
+    "image": "/Diwali/Luxary_set.webp"
+  },
+  {
+    "_id": "2",
+    "productTittle": "Smart Desk Organizer Gift Set",
+    "price": 1999,
+    "mrp": 2599,
+    "rating": 4.8,
+    "reviews": 150,
+    "image": "/Diwali/desk_organizer.jpeg"
+  },
+  {
+    "_id": "4",
+    "productTittle": "Minimal Scandinavian Gift Box",
+    "price": 1799,
+    "mrp": 2299,
+    "rating": 4.6,
+    "reviews": 100,
+    "image": "/Diwali/gifts_box.webp"
+  },
+  {
+    "_id": "6",
+    "productTittle": "Ambient Festive Light Box",
+    "price": 1299,
+    "mrp": 1699,
+    "rating": 4.5,
+    "reviews": 75,
+    "image": "/Diwali/light_box.jpg"
+  }
+
+  
+]

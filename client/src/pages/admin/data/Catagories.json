@@ -1,0 +1,100 @@
+[
+  {
+    "_id": "1",
+    "category": "Diwali Hampers",
+    "productTittle": "Luxury Festive Hamper",
+    "images": ["/Diwali/Hampers_gift.jpg"],
+    "variants": [{ "variantImage": ["/Diwali/Hampers_gift.jpg"] }],
+    "reviews": { "rating": { "average": 4.8 } }
+  },
+  {
+    "_id": "2",
+    "category": "Diwali Hampers",
+    "productTittle": "Corporate Gift Box",
+    "images": ["/Diwali/Corporate_gifts.jpg"],
+    "variants": [{ "variantImage": ["/Diwali/Corporate_gifts.jpg"] }],
+    "reviews": { "rating": { "average": 4.6 } }
+  },
+  {
+    "_id": "3",
+    "category": "Diwali Hampers",
+    "productTittle": "Family Celebration Pack",
+    "images": ["/Diwali/Family_gifts.jpg"],
+    "variants": [{ "variantImage": ["/Diwali/Family_gifts.jpg"] }],
+    "reviews": { "rating": { "average": 4.7 } }
+  },
+  {
+    "_id": "4",
+    "category": "Diwali Hampers",
+    "productTittle": "Sweets & Dry Fruits Combo",
+    "images": ["/Diwali/Sweets.jpg"],
+    "variants": [{ "variantImage": ["/Diwali/Sweets.jpg"] }],
+    "reviews": { "rating": { "average": 4.9 } }
+  },
+
+  {
+    "_id": "5",
+    "category": "Decorative Diyas",
+    "productTittle": "Hand Painted Diyas",
+    "images": ["/Diwali/diya.jpg"],
+    "variants": [{ "variantImage": ["/Diwali/diya.jpg"] }],
+    "reviews": { "rating": { "average": 4.5 } }
+  },
+  {
+    "_id": "6",
+    "category": "Decorative Diyas",
+    "productTittle": "LED Floating Diyas",
+    "images": ["/Diwali/led_diya.jpg"],
+    "variants": [{ "variantImage": ["/Diwali/led_diya.jpg"] }],
+    "reviews": { "rating": { "average": 4.4 } }
+  },
+  {
+    "_id": "7",
+    "category": "Decorative Diyas",
+    "productTittle": "Brass Designer Diyas",
+    "images": ["/Diwali/Diya1.jpg"],
+    "variants": [{ "variantImage": ["/Diwali/Diya1.jpg"] }],
+    "reviews": { "rating": { "average": 4.7 } }
+  },
+  {
+    "_id": "8",
+    "category": "Decorative Diyas",
+    "productTittle": "Floral Wax Diyas",
+    "images": ["/Diwali/floral_diya.jpg"],
+    "variants": [{ "variantImage": ["/Diwali/floral_diya.jpg"] }],
+    "reviews": { "rating": { "average": 4.6 } }
+  },
+
+  {
+    "_id": "9",
+    "category": "Home Decor",
+    "productTittle": "Festive Wall Hangings",
+    "images": ["/Diwali/Home_decor.jpg"],
+    "variants": [{ "variantImage": ["/Diwali/Home_decor.jpg"] }],
+    "reviews": { "rating": { "average": 4.5 } }
+  },
+  {
+    "_id": "10",
+    "category": "Home Decor",
+    "productTittle": "Rangoli Kit",
+    "images": ["/Diwali/rangoli_kit.WEBP"],
+    "variants": [{ "variantImage": ["/Diwali/rangoli_kit.webp"] }],
+    "reviews": { "rating": { "average": 4.6 } }
+  },
+  {
+    "_id": "11",
+    "category": "Home Decor",
+    "productTittle": "LED Curtain Lights",
+    "images": ["/Diwali/led_curtain.WEBP"],
+    "variants": [{ "variantImage": ["/Diwali/led_curtain.webp"] }],
+    "reviews": { "rating": { "average": 4.8 } }
+  },
+  {
+    "_id": "12",
+    "category": "Home Decor",
+    "productTittle": "Door Toran",
+    "images": ["/Diwali/door_toran.WEBP"],
+    "variants": [{ "variantImage": ["/Diwali/door_toran.webp"] }],
+    "reviews": { "rating": { "average": 4.7 } }
+  }
+]

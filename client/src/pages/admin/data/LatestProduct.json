@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "name": "Premium Diwali Indulgence Hamper",
+    "price": 1195,
+    "mrp": 1499,
+    "rating": 4.7,
+    "reviews": 118,
+    "image": "/public/Diwali/hampers.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Insulated Tumbler Gift Set",
+    "price": 725,
+    "mrp": 899,
+    "rating": 4.6,
+    "reviews": 85,
+    "image": "/public/Diwali/Tumbler.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Gourmet Sweets Celebration Box",
+    "price": 1495,
+    "mrp": 1595,
+    "rating": 4.8,
+    "reviews": 49,
+    "image": "/public/Diwali/Sweets2.AVIF"
+  },
+  {
+    "id": 4,
+    "name": "Pure Copper Water Bottle",
+    "price": 945,
+    "mrp": 1299,
+    "rating": 4.6,
+    "reviews": 29,
+    "image": "/public/Diwali/Copper_bottle.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Designer Clay Diya Set",
+    "price": 399,
+    "mrp": 599,
+    "rating": 4.5,
+    "reviews": 64,
+    "image": "/public/Diwali/Diya2.AVIF"
+  },
+  {
+    "id": 6,
+    "name": "Brass Diya Premium",
+    "price": 699,
+    "mrp": 999,
+    "rating": 4.7,
+    "reviews": 52,
+    "image": "/public/Diwali/Diya1.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Home Decor Lantern Set",
+    "price": 1299,
+    "mrp": 1599,
+    "rating": 4.5,
+    "reviews": 41,
+    "image": "/public/Diwali/Home_decor.jpg"
+  },
+  {
+    "id": 8,
+    "name": "Luxury Corporate Hamper",
+    "price": 1999,
+    "mrp": 2499,
+    "rating": 4.9,
+    "reviews": 73,
+    "image": "/public/Diwali/Premium_hampers.jpg"
+  }
+]
